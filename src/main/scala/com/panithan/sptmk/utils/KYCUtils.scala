@@ -2,7 +2,19 @@ package com.panithan.sptmk.utils
 
 object KYCUtils {
   // Write a function that takes an Integer and returns it as a string with the correct ordinal indicator suffix (in English). Examples: 1 => 1st, 2 => 2nd.
-  def getOrdinalNumberStr(number: Int): String = ???
+  def getOrdinalNumberStr(number: Int): String = {
+    // https://en.wikipedia.org/wiki/Ordinal_indicator#English
+    val isExceptionalNumber = List(11, 12, 13).contains(number % 100)
+    val lastDigit = number % 10
+    val suffix =
+      (lastDigit, isExceptionalNumber) match {
+        case (1, false) => "st"
+        case (2, false) => "nd"
+        case (3, false) => "rd"
+        case _ => "th"
+      }
+    s"$number$suffix"
+  }
 
   // Write a function that takes two dates (date_from, date_to, in dd-mm-yyyy format) and returns the number of Sundays in that range. Example: (‘01-05-2021’, ‘30-05-2021’) => 5.
   def getSundayCountFromDateRange(from: String, to: String): Int = ???
