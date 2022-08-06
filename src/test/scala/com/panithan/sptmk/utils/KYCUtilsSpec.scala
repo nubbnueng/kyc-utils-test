@@ -51,6 +51,15 @@ class KYCUtilsSpec extends AnyWordSpec {
       val actual = KYCUtils.getSundayCountFromDateRange("01-08-2022", "06-08-2022")
       assert(expected == actual)
     }
+    "throws IllegalArgumentException when inputs are not in dd-mm-yyyy date format" in {
+      assertThrows[IllegalArgumentException](KYCUtils.getSundayCountFromDateRange("01/08/2022", "31/08/2022"))
+      assertThrows[IllegalArgumentException](KYCUtils.getSundayCountFromDateRange("01-08-2022", "31/08/2022"))
+      assertThrows[IllegalArgumentException](KYCUtils.getSundayCountFromDateRange("01/08/2022", "31-08-2022"))
+    }
+    "throws IllegalArgumentException when from date is not before to date" in {
+      assertThrows[IllegalArgumentException](KYCUtils.getSundayCountFromDateRange("31-08-2022", "01-07-2022"))
+      assertThrows[IllegalArgumentException](KYCUtils.getSundayCountFromDateRange("31-08-2022", "31-07-2022"))
+    }
   }
 
   "getMarkedPersonalInformation method" should {

@@ -3,6 +3,7 @@ package com.panithan.sptmk.utils
 import org.joda.time.{DateTimeConstants, Days}
 import org.joda.time.format.DateTimeFormat
 
+import scala.util.Try
 import scala.util.matching.Regex
 
 object KYCUtils {
@@ -25,11 +26,20 @@ object KYCUtils {
   // Write a function that takes two dates (date_from, date_to, in dd-mm-yyyy format) and returns the number of Sundays in that range. Example: (‘01-05-2021’, ‘30-05-2021’) => 5.
   def getSundayCountFromDateRange(from: String, to: String): Int = {
     val dateTimeFormat = DateTimeFormat.forPattern("dd-MM-yyyy")
-    val dateFrom = dateTimeFormat.parseLocalDate(from)
-    val dateTo = dateTimeFormat.parseLocalDate(to)
-    val daysBetween = Days.daysBetween(dateFrom, dateTo).getDays
-    val dates = (0 to daysBetween).map(days => dateFrom.plusDays(days)).toList
-    dates.count(_.getDayOfWeek == DateTimeConstants.SUNDAY)
+    val dateFromOpt = Try(dateTimeFormat.parseLocalDate(from)).toOption
+    val dateToOpt = Try(dateTimeFormat.parseLocalDate(to)).toOption
+    (dateFromOpt, dateToOpt) match {
+      case (Some(dateFrom), Some(dateTo)) =>
+        if (dateFrom.isBefore(dateTo)) {
+          val daysBetween = Days.daysBetween(dateFrom, dateTo).getDays
+          val dates = (0 to daysBetween).map(days => dateFrom.plusDays(days)).toList
+          dates.count(_.getDayOfWeek == DateTimeConstants.SUNDAY)
+        } else {
+          throw new IllegalArgumentException("from date must be before to date")
+        }
+      case _ =>
+        throw new IllegalArgumentException("Inputs must be in dd-mm-yyyy date format")
+    }
   }
 
   // Mask personal information: create a function that takes a String as input and returns it partly obfuscated. The function only recognizes emails and phone numbers, any other String that doesn’t match these types results in an error
