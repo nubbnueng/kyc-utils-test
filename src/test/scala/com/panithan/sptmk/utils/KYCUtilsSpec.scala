@@ -60,8 +60,8 @@ class KYCUtilsSpec extends AnyWordSpec {
       assert(expected == actual)
     }
     "return +44 123 456 789 when input is +**-***-**6-789" in {
-      val expected = "+44 123 456 789"
-      val actual = KYCUtils.getMarkedPersonalInformation("+**-***-**6-789")
+      val expected = "+**-***-**6-789"
+      val actual = KYCUtils.getMarkedPersonalInformation("+44 123 456 789")
       assert(expected == actual)
     }
   }
