@@ -1,5 +1,8 @@
 package com.panithan.sptmk.utils
 
+import org.joda.time.{DateTimeConstants, Days}
+import org.joda.time.format.DateTimeFormat
+
 object KYCUtils {
   // Write a function that takes an Integer and returns it as a string with the correct ordinal indicator suffix (in English). Examples: 1 => 1st, 2 => 2nd.
   def getOrdinalNumberStr(number: Int): String = {
@@ -18,7 +21,14 @@ object KYCUtils {
   }
 
   // Write a function that takes two dates (date_from, date_to, in dd-mm-yyyy format) and returns the number of Sundays in that range. Example: (‘01-05-2021’, ‘30-05-2021’) => 5.
-  def getSundayCountFromDateRange(from: String, to: String): Int = ???
+  def getSundayCountFromDateRange(from: String, to: String): Int = {
+    val dateTimeFormat = DateTimeFormat.forPattern("dd-MM-yyyy")
+    val dateFrom = dateTimeFormat.parseLocalDate(from)
+    val dateTo = dateTimeFormat.parseLocalDate(to)
+    val daysBetween = Days.daysBetween(dateFrom, dateTo).getDays
+    val dates = (0 to daysBetween).map(days => dateFrom.plusDays(days)).toList
+    dates.count(_.getDayOfWeek == DateTimeConstants.SUNDAY)
+  }
 
   // Mask personal information: create a function that takes a String as input and returns it partly obfuscated. The function only recognizes emails and phone numbers, any other String that doesn’t match these types results in an error
   // Emails: emails need to be in a valid email format. To obfuscate it, it should be converted to lowercase and all characters in the local-part between the first and last should be replaced by 5 asterisks (*). Example: local-part@domain-name.com => l*****t@domain-name.com.
