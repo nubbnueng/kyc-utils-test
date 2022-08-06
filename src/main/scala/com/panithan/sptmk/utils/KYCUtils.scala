@@ -3,6 +3,7 @@ package com.panithan.sptmk.utils
 object KYCUtils {
   // Write a function that takes an Integer and returns it as a string with the correct ordinal indicator suffix (in English). Examples: 1 => 1st, 2 => 2nd.
   def getOrdinalNumberStr(number: Int): String = {
+    require(number > 0, "Ordinal number must be positive")
     // https://en.wikipedia.org/wiki/Ordinal_indicator#English
     val isExceptionalNumber = List(11, 12, 13).contains(number % 100)
     val lastDigit = number % 10
