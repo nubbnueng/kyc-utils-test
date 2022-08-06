@@ -24,6 +24,20 @@ class KYCUtilsSpec extends AnyWordSpec {
       val actual = KYCUtils.getOrdinalNumberStr(4)
       assert(expected == actual)
     }
+    "return 88th when input is 88" in {
+      val expected = "88th"
+      val actual = KYCUtils.getOrdinalNumberStr(88)
+      assert(expected == actual)
+    }
+    "return 111th when input is 111" in {
+      val expected = "111th"
+      val actual = KYCUtils.getOrdinalNumberStr(111)
+      assert(expected == actual)
+    }
+    "throws IllegalArgumentException when input < 1" in {
+      assertThrows[IllegalArgumentException](KYCUtils.getOrdinalNumberStr(0))
+      assertThrows[IllegalArgumentException](KYCUtils.getOrdinalNumberStr(-1))
+    }
   }
 
   "getSundayCountFromDateRange method" should {
