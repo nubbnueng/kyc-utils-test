@@ -59,10 +59,28 @@ class KYCUtilsSpec extends AnyWordSpec {
       val actual = KYCUtils.getMarkedPersonalInformation("local-part@domain-name.com")
       assert(expected == actual)
     }
+    "return p*****k@domain-name.com when input is panithan.sptmk@domain-name.com" in {
+      val expected = "p*****k@domain-name.com"
+      val actual = KYCUtils.getMarkedPersonalInformation("panithan.sptmk@domain-name.com")
+      assert(expected == actual)
+    }
     "return +44 123 456 789 when input is +**-***-**6-789" in {
       val expected = "+**-***-**6-789"
       val actual = KYCUtils.getMarkedPersonalInformation("+44 123 456 789")
       assert(expected == actual)
+    }
+    "return +66 84 332 8877 when input is +**-**-***-8877" in {
+      val expected = "+**-**-***-8877"
+      val actual = KYCUtils.getMarkedPersonalInformation("+66 84 332 8877")
+      assert(expected == actual)
+    }
+    "return 0843328877 when input is ******8877" in {
+      val expected = "******8877"
+      val actual = KYCUtils.getMarkedPersonalInformation("0843328877")
+      assert(expected == actual)
+    }
+    "throw IllegalArgumentException when input is not match either email address or phone number format" in {
+      assertThrows[IllegalArgumentException](KYCUtils.getMarkedPersonalInformation("123 ABC"))
     }
   }
 }
